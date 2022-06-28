@@ -13,19 +13,19 @@ page 50102 ProcedureList
         {
             repeater(Group)
             {
-                field("No."; "No.")
+                field("No."; Rec."No.")
                 {
                     //ApplicationArea = All;
                 }
-                field(Parameters; Parameters)
+                field(Parameters; Rec.Parameters)
                 {
                     //ApplicationArea = All;
                 }
-                field(IsParameterNeeded; IsParameterNeeded)
+                field(IsParameterNeeded; Rec.IsParameterNeeded)
                 {
                    // ApplicationArea = All;
                 }
-                field(Description;Description)
+                field(Description;Rec.Description)
                 {
 
                 }

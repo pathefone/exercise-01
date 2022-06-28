@@ -12,7 +12,6 @@ codeunit 50101 TestingCodeunit
         letter: Text[30];
     begin
         length := StrLen(textVar);
-        result := '';
         while length > 0 do begin
             letter := CopyStr(textVar, length, 1);
             result += letter;
@@ -27,11 +26,10 @@ codeunit 50101 TestingCodeunit
         maxNum: Integer;
     begin
         maxNum := 101;
-        for counter := 1 to 100 do
-        begin
+        for counter := 1 to 100 do begin
             GeneratedArray[counter] := Random(maxNum); //inclusive
-        if GeneratedArray[counter] = 1 then
-            GeneratedArray[counter] := 2; //specific case for 3rd task, because of algo 
+            if GeneratedArray[counter] = 1 then
+                GeneratedArray[counter] := 2; //specific case for 3rd task, because of algo 
         end;
     end;
 
@@ -39,19 +37,18 @@ codeunit 50101 TestingCodeunit
     var
         maxNum: Integer;
         minNum: Integer;
-        temp: Integer;
+        minMaxText: Label 'Max value: %1\, Min value: %2\';
     begin
         maxNum := numbersArray[1];
         minNum := numbersArray[1];
-        for counter := 1 to 100 do
-            temp := numbersArray[counter];
-        if (temp > maxNum) then
-            maxNum := temp;
-        if (temp < minNum) then
-            minNum := temp;
+        for counter := 1 to ArrayLen(numbersArray) do begin
+            if (numbersArray[counter] > maxNum) then
+                maxNum := numbersArray[counter];
+            if (numbersArray[counter] < minNum) then
+                minNum := numbersArray[counter];
+        end;
 
-        Message(maxValueLabel + '%1\' + ', ' + minValueLabel + '%2\', maxNum, minNum);
-        //create another procedure for messaging?
+        Message(minMaxText, maxNum, minNum);
     end;
 
     procedure FindDuplicates(numbersArray: array[100] of Integer)
@@ -59,8 +56,7 @@ codeunit 50101 TestingCodeunit
         index: Integer;
         duplicateValues: List of [Integer];
     begin
-        for counter := 1 to 100 do
-        begin
+        for counter := 1 to 100 do begin
             index := System.Abs(numbersArray[counter]) - 1;
             if (numbersArray[index] < 0) then
                 duplicateValues.Add(numbersArray[counter]);
@@ -111,7 +107,7 @@ codeunit 50101 TestingCodeunit
         end;
     end;
 
-    procedure InsertRecord(id: Integer;parameters: Text;description: Text;isParameterNeeded: Boolean)
+    procedure InsertRecord(id: Integer; parameters: Text; description: Text; isParameterNeeded: Boolean)
     var
         ProcedureRecord: Record Procedures;
     begin
@@ -120,14 +116,12 @@ codeunit 50101 TestingCodeunit
         ProcedureRecord.Parameters := parameters;
         ProcedureRecord.Description := description;
         ProcedureRecord.IsParameterNeeded := isParameterNeeded;
-        if ProcedureRecord.Insert(false,false) then
-                Sleep(1); //if already exists
+        if ProcedureRecord.Insert(false, false) then
+            Sleep(1); //if already exists
     end;
 
 
     var
         myInt: Integer;
         counter: Integer;
-        maxValueLabel: Label 'Max value: ';
-        minValueLabel: Label 'Min value: ';
 }

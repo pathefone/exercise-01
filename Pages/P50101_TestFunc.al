@@ -12,31 +12,28 @@ page 50101 "Procedures Page"
         {
             group(GroupName)
             {
-                field("No."; "No.")
+                field("No."; Rec."No.")
                 {
                     //ApplicationArea = All;
                     Enabled = false;
                 }
-                field(Parameters; Parameters)
+                field(Parameters; Rec.Parameters)
                 {
                     //ApplicationArea = All;
                     Enabled = isEnabledState;
-                    
+
                 }
-                field(IsParameterNeeded; IsParameterNeeded)
-                {
-                   // ApplicationArea = All;
-                   trigger OnValidate()
-                    begin
-                        if(IsParameterNeeded = true) then
-                        isEnabledState := true
-                        else
-                        isEnabledState := false;
-                    end;
-                }
-                field(Description;Description)
+                field(Description; Rec.Description)
                 {
                     Enabled = false;
+                }
+                field(IsParameterNeeded; Rec.IsParameterNeeded)
+                {
+                    //ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        isEnabledState := Rec.IsParameterNeeded;
+                    end;
                 }
             }
         }
@@ -53,41 +50,38 @@ page 50101 "Procedures Page"
                 trigger OnAction()
                 var
                     FirstCodeunit: Codeunit TestingCodeunit;
-                    randomNumArray: array [100] of Integer;
+                    randomNumArray: array[100] of Integer;
                     balsiuKiekis: Integer;
                     priebalsiuKiekis: Integer;
+                    balsesPriebalsesText: Label 'Balsiu kiekis: %1\, Priebalsiu kiekis: %2\';
+                    tekstas: Label 'Programuotojo ar tiesiog bet kokio IT specialisto profesija taps vis labiau įprasta';
                 begin
-                    CopyArray(randomNumArray, FirstCodeunit.GenerateRandomArray(),1,100);
-                    
-                    if("No." = 1) then
-                        FirstCodeunit.ReverseStr(Parameters);
-                    if("No." = 2) then
+                    CopyArray(randomNumArray, FirstCodeunit.GenerateRandomArray(), 1, 100);
+
+                    if (Rec."No." = 1) then
+                        FirstCodeunit.ReverseStr(Rec.Parameters);
+                    if (Rec."No." = 2) then
                         FirstCodeunit.FindMaxMin(randomNumArray);
-                    if("No." = 3) then
+                    if (Rec."No." = 3) then
                         FirstCodeunit.FindDuplicates(randomNumArray);
-                    if("No." = 4) then
-                    begin
+                    if (Rec."No." = 4) then begin
                         balsiuKiekis := FirstCodeunit.BalsiuKiekis(tekstas);
                         priebalsiuKiekis := FirstCodeunit.PriebalsiuKiekis(tekstas);
-                        Message('Balsiu kiekis: ' + '%1\' + ', ' + 'Priebalsiu kiekis: ' + '%2\', balsiuKiekis, priebalsiuKiekis);
+                        Message(balsesPriebalsesText, balsiuKiekis, priebalsiuKiekis);
                     end;
                 end;
-            }  
+            }
         }
     }
 
-        trigger OnOpenPage()
-        begin
-            if(IsParameterNeeded = true) then
-            isEnabledState := true
-            else
-            isEnabledState := false;
-        end;
+    trigger OnOpenPage()
+    begin
+        isEnabledState := Rec.IsParameterNeeded;
+    end;
 
 
     var
         myInt: Integer;
         inputText: Text;
-        tekstas: Label 'Programuotojo ar tiesiog bet kokio IT specialisto profesija taps vis labiau įprasta';
         isEnabledState: Boolean;
 }
